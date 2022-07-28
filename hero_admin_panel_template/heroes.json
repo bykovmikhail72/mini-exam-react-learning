@@ -7,53 +7,42 @@
       "element": "earth"
     },
     {
-      "id": "4b10c788-0a09-4762-93a3-e824c4009295",
-      "name": "Первый герой",
-      "description": "Всегда первый (но не в этот раз)",
-      "element": "water"
-    },
-    {
-      "id": "cc886964-d407-4177-ad60-0651be4a1ee6",
-      "name": "dsa",
-      "description": "das",
+      "id": "29e83237-55ff-4e3b-9f58-f226303a5eb5",
+      "name": "fsad",
+      "description": "fasd",
       "element": "fire"
     }
   ],
   "filters": [
     {
-      "element": "none",
+      "element": "all",
       "id": "0",
       "class": "btn-outline-dark",
-      "name": "Все",
-      "active": true
+      "name": "Все"
     },
     {
       "element": "fire",
       "id": "1",
       "class": "btn-outline-danger",
-      "name": "Огонь",
-      "active": false
+      "name": "Огонь"
     },
     {
       "element": "water",
       "id": "2",
       "class": "btn-outline-primary",
-      "name": "Вода",
-      "active": false
+      "name": "Вода"
     },
     {
       "element": "wind",
       "id": "3",
       "class": "btn-outline-success",
-      "name": "Ветер",
-      "active": false
+      "name": "Ветер"
     },
     {
       "element": "earth",
       "id": "4",
       "class": "btn-outline-secondary",
-      "name": "Земля",
-      "active": false
+      "name": "Земля"
     }
   ],
   "elements": [

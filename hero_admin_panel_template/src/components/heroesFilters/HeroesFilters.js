@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { filtersFetched, filterAddActive, filtersFetching, filtersFetchingError } from "../../actions";
+import { fetchFilters, filterAddActive } from "../../actions";
 import { useEffect } from "react";
 import { useHttp } from "../../hooks/http.hook";
 import Spinner from "../spinner/Spinner";
@@ -18,34 +18,14 @@ const HeroesFilters = () => {
     
     
     useEffect(() => {
-        dispatch(filtersFetching());
-        request("http://localhost:3001/filters")
-            .then(data => dispatch(filtersFetched(data)))
-            .catch(() => dispatch(filtersFetchingError()));
+        dispatch(fetchFilters(request))
         //eslint-disable-next-line
     }, [])
-
-    function onToggleFilter (e) {
-        const index = filters.findIndex(item => item.id === e.target.id);
-        let nonActiveArr = filters.map(item => {
-            return {
-                ...item,
-                active: false
-            }
-        })
-
-        const newObj = {...filters[index], active: true};
-        
-        nonActiveArr = [...nonActiveArr.slice(0, index), newObj, ...nonActiveArr.slice(index + 1)];
-        console.log(nonActiveArr)
-
-        dispatch(filterAddActive(nonActiveArr));
-    }
 
     const renderFilters = () => {
         if (heroesLoadingStatus === 'error') {
             return (
-                <h5 className="text-center mt-5">Героев пока нет</h5>
+                <h5 className="text-center mt-5">Фильтров не найдено</h5>
             )
         }
         
@@ -55,15 +35,15 @@ const HeroesFilters = () => {
 
         return (
             <div className="btn-group">
-                {filters.map((item, i) => {
-                    const activeClass = classNames({
-                        'active': item.active
+                {filters.filters.map((item, i) => {
+                    const activeClass = classNames({  
+                        'active': item.element === filters.activeFilter
                     })
                     return (
                         <button className={`btn ${item.class} ${activeClass}`} 
                             id={item.id}
                             key={i}
-                            onClick={onToggleFilter}>{item.name}</button>
+                            onClick={() => dispatch(filterAddActive(item.element))}>{item.name}</button>
                     )
                 })}
             </div>

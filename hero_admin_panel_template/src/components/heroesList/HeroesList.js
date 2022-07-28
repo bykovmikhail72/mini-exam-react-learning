@@ -1,8 +1,9 @@
 import {useHttp} from '../../hooks/http.hook';
 import { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from 'reselect'
 
-import { heroesFetching, heroesFetched, heroesFetchingError, itemDelete } from '../../actions';
+import { fetchHeroes, itemDelete } from '../../actions';
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from '../spinner/Spinner';
 
@@ -12,16 +13,24 @@ import Spinner from '../spinner/Spinner';
 // Удаление идет и с json файла при помощи метода DELETE
 
 const HeroesList = () => {
-    const {heroes, heroesLoadingStatus, filters} = useSelector(state => state);
+    const {heroesLoadingStatus} = useSelector(state => state);
     const dispatch = useDispatch();
     const {request} = useHttp();
 
-    useEffect(() => {
-        dispatch(heroesFetching());
-        request("http://localhost:3001/heroes")
-            .then(data => dispatch(heroesFetched(data)))
-            .catch(() => dispatch(heroesFetchingError()))
+    const filteredHeroesSelector = createSelector(
+        (state) => state.filters.activeFilter,
+        (state) => state.heroes.heroes,
+        (filter, heroes) => {
+            if (filter === 'all') {
+                return heroes;
+            } else return heroes.filter(item => item.element === filter);
+        }  
+    );
 
+    const filteredHeroes = useSelector(filteredHeroesSelector);
+
+    useEffect(() => {
+        dispatch(fetchHeroes(request));
         // eslint-disable-next-line
     }, []);
 
@@ -43,22 +52,12 @@ const HeroesList = () => {
             return <h5 className="text-center mt-5">Героев пока нет</h5>
         }
 
-        if (filters[0] && filters[0].active) {
-            return arr.map(({id, ...props}) => {
-                return <HeroesListItem key={id} {...props} onDelete={() => {onDelete(id)}}/>
-            })
-        }
-
-        const activeFilter = filters.filter(item => item.active);
-
-        const filterItems = arr.filter(item => item.element === activeFilter[0]?.element);
-
-        return filterItems.map(({id, ...props}) => {
+        return arr.map(({id, ...props}) => {
             return <HeroesListItem key={id} {...props} onDelete={() => {onDelete(id)}}/>
         })
     }
 
-    const elements = renderHeroesList(heroes);
+    const elements = renderHeroesList(filteredHeroes);
     return (
         <ul>
             {elements}

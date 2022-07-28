@@ -23,7 +23,7 @@ const HeroesAddForm = () => {
     const {request} = useHttp();
 
     const dispatch = useDispatch();
-    const {elements} = useSelector(state => state);
+    const {filters} = useSelector(state => state);
 
     useEffect(() => {
         request("http://localhost:3001/elements")
@@ -88,7 +88,7 @@ const HeroesAddForm = () => {
                     value={element}
                     onChange={(e) => setElement(e.target.value)}>
                     <option >Я владею элементом...</option>
-                    {elements.map((item, i) => {
+                    {filters.elements.map((item, i) => {
                         return (
                             <option value={item.value} key={i}>{item.elem}</option>
                         )
